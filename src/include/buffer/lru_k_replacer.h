@@ -132,14 +132,26 @@ class LRUKReplacer {
    */
   auto Size() -> size_t;
 
+  auto IsFull() -> bool;
+  struct Entry {
+    frame_id_t key_;
+    size_t cnt_{0};
+    bool evictable_{false};
+    bool is_in_history_list_{true};
+  };
+
  private:
   // TODO(student): implement me! You can replace these member variables as you like.
   // Remove maybe_unused if you start using them.
   [[maybe_unused]] size_t current_timestamp_{0};
-  [[maybe_unused]] size_t curr_size_{0};
-  [[maybe_unused]] size_t replacer_size_;
-  [[maybe_unused]] size_t k_;
+  size_t curr_size_{0};
+  size_t replacer_size_;
+  size_t k_;
   std::mutex latch_;
+
+  std::list<Entry> histroy_list_;
+  std::list<Entry> cache_list_;
+  std::unordered_map<frame_id_t, std::list<Entry>::iterator> map_;
 };
 
 }  // namespace bustub

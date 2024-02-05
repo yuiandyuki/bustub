@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <list>
 #include <memory>
 #include <mutex>  // NOLINT
@@ -105,6 +106,10 @@ class ExtendibleHashTable : public HashTable<K, V> {
    */
   auto Remove(const K &key) -> bool override;
 
+  inline auto GetLowKBit(int k, size_t n) -> int;
+
+  inline auto TestKBit(int k, size_t n) -> int;
+
   /**
    * Bucket class for each hash table bucket that the directory points to.
    */
@@ -157,11 +162,17 @@ class ExtendibleHashTable : public HashTable<K, V> {
      */
     auto Insert(const K &key, const V &value) -> bool;
 
+    auto CheckBucket() -> bool;
+
+    auto IndexOf(const K &key) -> size_t;
+
    private:
     // TODO(student): You may add additional private members and helper functions
     size_t size_;
     int depth_;
     std::list<std::pair<K, V>> list_;
+
+    auto FindKeyPos(const K &key) -> typename std::list<std::pair<K, V>>::iterator;
   };
 
  private:
